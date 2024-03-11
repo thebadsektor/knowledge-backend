@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, String, Float, Boolean, JSON
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -70,6 +71,15 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Create the FastAPI database instance
 database = Database(DATABASE_URL)
 
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Update with the appropriate origin(s) in a production environment
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Function to create the database and insert dummy records
 async def create_dummy_records():
     async with database.transaction():
@@ -113,7 +123,7 @@ async def create_dummy_records():
                 "categories": ["Dummy Category"],
                 "tags": ["Dummy Tag"],
                 "featuredImageId": "1",
-                "images": [{"id": "1", "url": "image1.jpg"}],
+                "images": [{"id": "1", "url": "assets/images/apps/ecommerce/a-walk-amongst-friends.jpg"}],
                 "priceTaxExcl": 50.0,
                 "priceTaxIncl": 55.0,
                 "taxRate": 10.0,
@@ -136,7 +146,7 @@ async def create_dummy_records():
                 "categories": ["Dummy Category"],
                 "tags": ["Dummy Tag"],
                 "featuredImageId": "2",
-                "images": [{"id": "2", "url": "image2.jpg"}],
+                "images": [{"id": "2", "url": "assets/images/apps/ecommerce/braies-lake.jpg"}],
                 "priceTaxExcl": 75.0,
                 "priceTaxIncl": 82.5,
                 "taxRate": 10.0,
@@ -159,7 +169,7 @@ async def create_dummy_records():
                 "categories": ["Dummy Category"],
                 "tags": ["Dummy Tag"],
                 "featuredImageId": "3",
-                "images": [{"id": "3", "url": "image3.jpg"}],
+                "images": [{"id": "3", "url": "assets/images/apps/ecommerce/fall-glow.jpg"}],
                 "priceTaxExcl": 100.0,
                 "priceTaxIncl": 110.0,
                 "taxRate": 10.0,
@@ -194,6 +204,31 @@ async def create_database():
         raise HTTPException(status_code=500, detail=str(e))
 
 # New route to get all records from the "products" table
-@app.get("/products", response_model=List[ProductSchema])
+@app.get("/e-commerce/products", response_model=List[ProductSchema])
 async def read_products():
     return await get_all_products()
+
+@app.get("/e-commerce/products/{product_id}", response_model=ProductSchema)
+async def read_product_by_id(product_id: str):
+    query = Product.__table__.select().where(Product.id == product_id)
+    product = await database.fetch_one(query)
+
+    if product:
+        return product
+    else:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+@app.post("/e-commerce/products", response_model=ProductSchema)
+async def create_product(product: ProductSchema):
+    new_product = product.dict()
+    query = Product.__table__.insert().values(new_product)
+    product_id = await database.execute(query)
+
+    # Fetch the created product by its ID and return it in the response
+    created_product = await get_product_by_id(product_id)
+    return created_product
+
+# Helper function to get a product by ID
+async def get_product_by_id(product_id: str):
+    query = Product.__table__.select().where(Product.id == product_id)
+    return await database.fetch_one(query)
