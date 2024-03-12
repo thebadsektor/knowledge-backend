@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, String, Float, Boolean, JSON
 from sqlalchemy.orm import declarative_base
@@ -72,12 +72,19 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 database = Database(DATABASE_URL)
 
 # Configure CORS
+
+origins = [
+    "*",
+    "http://localhost:3000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Update with the appropriate origin(s) in a production environment
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
 )
 
 # Function to create the database and insert dummy records
@@ -218,9 +225,34 @@ async def read_product_by_id(product_id: str):
     else:
         raise HTTPException(status_code=404, detail="Product not found")
     
+
+@app.delete("/e-commerce/products/{product_id}", response_model=dict)
+async def delete_product_by_id(product_id: str):
+    query = Product.__table__.delete().where(Product.id == product_id)
+    deleted_rows = await database.execute(query)
+
+    if deleted_rows:
+        return {"message": f"Product with ID {product_id} deleted successfully"}
+    else:
+        raise HTTPException(status_code=404, detail=f"Product with ID {product_id} not found")
+
+@app.delete("/e-commerce/products", response_model=dict)
+async def delete_products(product_ids: List[str]):
+    query = Product.__table__.delete().where(Product.id.in_(product_ids))
+    deleted_rows = await database.execute(query)
+
+    if deleted_rows:
+        return {"message": f"{deleted_rows} product(s) deleted successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="No matching products found for deletion")
+    
+import uuid
+
 @app.post("/e-commerce/products", response_model=ProductSchema)
 async def create_product(product: ProductSchema):
     new_product = product.dict()
+    new_product["id"] = str(uuid.uuid4())
+    print(new_product["id"])
     query = Product.__table__.insert().values(new_product)
     product_id = await database.execute(query)
 
@@ -232,3 +264,23 @@ async def create_product(product: ProductSchema):
 async def get_product_by_id(product_id: str):
     query = Product.__table__.select().where(Product.id == product_id)
     return await database.fetch_one(query)
+
+
+@app.put("/e-commerce/products/{product_id}", response_model=ProductSchema)
+async def update_product(product_id: str, updated_product: ProductSchema):
+    # Check if the product with the given ID exists
+    existing_product = await get_product_by_id(product_id)
+    if not existing_product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # Update the existing product with the new data
+    updated_product_data = updated_product.dict(exclude_unset=True)
+    for key, value in updated_product_data.items():
+        setattr(existing_product, key, value)
+
+    # Commit the changes to the database
+    query = Product.__table__.update().where(Product.id == product_id).values(updated_product_data)
+    await database.execute(query)
+
+    # Return the updated product
+    return existing_product
