@@ -1,11 +1,12 @@
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine, Column, String, Float, Boolean, JSON
+from sqlalchemy import create_engine, Column, String, Float, Boolean, JSON, Integer
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from databases import Database
 from typing import List
 from pydantic import BaseModel
+import uuid
 
 # Define the SQLAlchemy model
 Base = declarative_base()
@@ -33,6 +34,7 @@ class Product(Base):
     extraShippingFee = Column(Float)
     active = Column(Boolean)
 
+
 class ProductSchema(BaseModel):
     id: str
     name: str
@@ -54,6 +56,32 @@ class ProductSchema(BaseModel):
     weight: str
     extraShippingFee: float
     active: bool
+
+class Sumdoc(Base):
+    __tablename__ = "sumdocs"
+    id = Column(String, primary_key=True, index=True)
+    title = Column(String)
+    slug = Column(String)
+    description = Column(String)
+    category = Column(String)
+    duration = Column(Integer)
+    totalSteps = Column(Integer)
+    updatedAt = Column(String)
+    featured = Column(Boolean)
+    progress = Column(JSON)
+
+
+class SumdocSchema(BaseModel):
+    id: str
+    title: str
+    slug: str
+    description: str
+    category: str
+    duration: int
+    totalSteps: int
+    updatedAt: str
+    featured: bool
+    progress: List[dict]
 
 # Define the FastAPI app
 app = FastAPI()
@@ -86,6 +114,70 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["Content-Disposition"],
 )
+
+async def create_dummy_sumdocs():
+    async with database.transaction():
+        await database.execute("DROP TABLE IF EXISTS sumdocs")
+        await database.execute(
+            """
+            CREATE TABLE sumdocs (
+                id TEXT PRIMARY KEY,
+                title TEXT,
+                slug TEXT,
+                description TEXT,
+                category TEXT,
+                duration INTEGER,
+                totalSteps INTEGER,
+                updatedAt TEXT,
+                featured BOOLEAN,
+                progress JSON
+            )
+            """
+        )
+
+        # Insert dummy records
+        sumdocs = [
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Dummy Sumdoc 1",
+                "slug": "dummy-sumdoc-1",
+                "description": "This is a dummy sumdoc.",
+                "category": "Dummy Category",
+                "duration": 30,
+                "totalSteps": 10,
+                "updatedAt": "2024-03-12T12:00:00",
+                "featured": True,
+                "progress": [{"currentStep": "5", "completed": "50"}]
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Dummy Sumdoc 2",
+                "slug": "dummy-sumdoc-2",
+                "description": "Another dummy sumdoc.",
+                "category": "Dummy Category",
+                "duration": 45,
+                "totalSteps": 15,
+                "updatedAt": "2024-03-12T13:30:00",
+                "featured": False,
+                "progress": [{"currentStep": "8", "completed": "60"}]
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Dummy Sumdoc 3",
+                "slug": "dummy-sumdoc-3",
+                "description": "Yet another dummy sumdoc.",
+                "category": "Dummy Category",
+                "duration": 60,
+                "totalSteps": 20,
+                "updatedAt": "2024-03-12T15:00:00",
+                "featured": True,
+                "progress": [{"currentStep": "10", "completed": "100"}]
+            },
+        ]
+
+        # Insert dummy records into the products table
+        for sumdoc in sumdocs:
+            await database.execute(Sumdoc.__table__.insert().values(sumdoc))
 
 # Function to create the database and insert dummy records
 async def create_dummy_records():
@@ -123,7 +215,7 @@ async def create_dummy_records():
         products = [
             # Dummy Product 1
             {
-                "id": "1",
+                "id": str(uuid.uuid4()),
                 "name": "Dummy Product 1",
                 "handle": "dummy-product-1",
                 "description": "This is a dummy product.",
@@ -146,7 +238,7 @@ async def create_dummy_records():
             },
             # Dummy Product 2
             {
-                "id": "2",
+                "id": str(uuid.uuid4()),
                 "name": "Dummy Product 2",
                 "handle": "dummy-product-2",
                 "description": "Another dummy product.",
@@ -169,7 +261,7 @@ async def create_dummy_records():
             },
             # Dummy Product 3
             {
-                "id": "3",
+                "id": str(uuid.uuid4()),
                 "name": "Dummy Product 3",
                 "handle": "dummy-product-3",
                 "description": "Yet another dummy product.",
@@ -210,6 +302,9 @@ async def create_database():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+
+
 # New route to get all records from the "products" table
 @app.get("/e-commerce/products", response_model=List[ProductSchema])
 async def read_products():
@@ -246,7 +341,6 @@ async def delete_products(product_ids: List[str]):
     else:
         raise HTTPException(status_code=404, detail="No matching products found for deletion")
     
-import uuid
 
 @app.post("/e-commerce/products", response_model=ProductSchema)
 async def create_product(product: ProductSchema):
@@ -284,3 +378,22 @@ async def update_product(product_id: str, updated_product: ProductSchema):
 
     # Return the updated product
     return existing_product
+
+# Route to create the database and insert dummy records
+@app.post("/initialize_sumdocs")
+async def create_database():
+    try:
+        await create_dummy_sumdocs()
+        return {"message": "Database created successfully with dummy records."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Function to get all records from the "products" table
+async def get_all_sumdocs():
+    query = Sumdoc.__table__.select()
+    return await database.fetch_all(query)
+
+# New route to get all records from the "products" table
+@app.get("/summarizer/sumdocs", response_model=List[SumdocSchema])
+async def read_sumdocs():
+    return await get_all_sumdocs()
