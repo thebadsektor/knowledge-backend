@@ -17,6 +17,7 @@ class Product(Base):
     name = Column(String)
     handle = Column(String)
     description = Column(String)
+    category = Column(String)
     categories = Column(JSON)
     tags = Column(JSON)
     featuredImageId = Column(String)
@@ -33,6 +34,14 @@ class Product(Base):
     weight = Column(String)
     extraShippingFee = Column(Float)
     active = Column(Boolean)
+    title = Column(String)
+    slug = Column(String)
+    duration = Column(Integer)
+    totalSteps = Column(Integer)
+    updatedAt = Column(String)
+    featured = Column(Boolean)
+    progress = Column(JSON)
+    steps = Column(JSON)
 
 
 class ProductSchema(BaseModel):
@@ -40,6 +49,7 @@ class ProductSchema(BaseModel):
     name: str
     handle: str
     description: str
+    category: str
     categories: List[str]
     tags: List[str]
     featuredImageId: str
@@ -56,6 +66,14 @@ class ProductSchema(BaseModel):
     weight: str
     extraShippingFee: float
     active: bool
+    title: str
+    slug: str
+    duration: int
+    totalSteps: int
+    updatedAt: str
+    featured: bool
+    progress: List[dict]
+    steps: List[dict]
 
 class Sumdoc(Base):
     __tablename__ = "sumdocs"
@@ -69,6 +87,7 @@ class Sumdoc(Base):
     updatedAt = Column(String)
     featured = Column(Boolean)
     progress = Column(JSON)
+    steps = Column(JSON)
 
 
 class SumdocSchema(BaseModel):
@@ -82,6 +101,7 @@ class SumdocSchema(BaseModel):
     updatedAt: str
     featured: bool
     progress: List[dict]
+    steps: List[dict]
 
 # Define the FastAPI app
 app = FastAPI()
@@ -130,7 +150,8 @@ async def create_dummy_sumdocs():
                 totalSteps INTEGER,
                 updatedAt TEXT,
                 featured BOOLEAN,
-                progress JSON
+                progress JSON,
+                steps JSON
             )
             """
         )
@@ -142,36 +163,128 @@ async def create_dummy_sumdocs():
                 "title": "Dummy Sumdoc 1",
                 "slug": "dummy-sumdoc-1",
                 "description": "This is a dummy sumdoc.",
-                "category": "Dummy Category",
+                "category": "leases",
                 "duration": 30,
-                "totalSteps": 10,
+                "totalSteps": 3,
                 "updatedAt": "2024-03-12T12:00:00",
                 "featured": True,
-                "progress": [{"currentStep": "5", "completed": "50"}]
+                "progress": [{"currentStep": "1", "completed": "50"}],
+                "steps": [
+                    {
+                    "order": 0,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    },
+                    {
+                    "order": 1,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    },
+                    {
+                    "order": 2,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    }
+                ]
             },
             {
                 "id": str(uuid.uuid4()),
                 "title": "Dummy Sumdoc 2",
                 "slug": "dummy-sumdoc-2",
                 "description": "Another dummy sumdoc.",
-                "category": "Dummy Category",
+                "category": "contracts",
                 "duration": 45,
-                "totalSteps": 15,
+                "totalSteps": 3,
                 "updatedAt": "2024-03-12T13:30:00",
                 "featured": False,
-                "progress": [{"currentStep": "8", "completed": "60"}]
+                "progress": [{"currentStep": "1", "completed": "60"}],
+                "steps": [
+                    {
+                    "order": 0,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    },
+                    {
+                    "order": 1,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    },
+                    {
+                    "order": 2,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    }
+                ]
             },
             {
                 "id": str(uuid.uuid4()),
                 "title": "Dummy Sumdoc 3",
-                "slug": "dummy-sumdoc-3",
+                "slug": "ip",
                 "description": "Yet another dummy sumdoc.",
-                "category": "Dummy Category",
+                "category": "leases",
                 "duration": 60,
-                "totalSteps": 20,
+                "totalSteps": 3,
                 "updatedAt": "2024-03-12T15:00:00",
                 "featured": True,
-                "progress": [{"currentStep": "10", "completed": "100"}]
+                "progress": [{"currentStep": "1", "completed": "100"}],
+                "steps": [
+                    {
+                    "order": 0,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    },
+                    {
+                    "order": 1,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    },
+                    {
+                    "order": 2,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    }
+                ]
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Dummy Sumdoc 4",
+                "slug": "dummy-sumdoc-3",
+                "description": "Yet another dummy sumdoc.",
+                "category": "contracts",
+                "duration": 60,
+                "totalSteps": 3,
+                "updatedAt": "2024-03-12T15:00:00",
+                "featured": True,
+                "progress": [{"currentStep": "1", "completed": "100"}],
+                "steps": [
+                    {
+                    "order": 0,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    },
+                    {
+                    "order": 1,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    },
+                    {
+                    "order": 2,
+                    "title": "Get the sample code",
+                    "subtitle": "Where to find the sample code and how to access it",
+                    "content": "Get the sample code"
+                    }
+                ]
             },
         ]
 
@@ -191,6 +304,7 @@ async def create_dummy_records():
                 name TEXT,
                 handle TEXT,
                 description TEXT,
+                category TEXT,
                 categories JSON,
                 tags JSON,
                 featuredImageId TEXT,
@@ -206,7 +320,15 @@ async def create_dummy_records():
                 depth TEXT,
                 weight TEXT,
                 extraShippingFee REAL,
-                active BOOLEAN
+                active BOOLEAN,
+                title TEXT,
+                slug TEXT,
+                duration INTEGER,
+                totalSteps INTEGER,
+                updatedAt TEXT,
+                featured BOOLEAN,
+                progress JSON,
+                steps JSON
             )
             """
         )
@@ -219,6 +341,7 @@ async def create_dummy_records():
                 "name": "Dummy Product 1",
                 "handle": "dummy-product-1",
                 "description": "This is a dummy product.",
+                "category": "contracts",
                 "categories": ["Dummy Category"],
                 "tags": ["Dummy Tag"],
                 "featuredImageId": "1",
@@ -235,6 +358,33 @@ async def create_dummy_records():
                 "weight": "0.5kg",
                 "extraShippingFee": 5.0,
                 "active": True,
+                "title": "Dummy Product 1 Title",
+                "slug": "dummy-product-1-slug",
+                "duration": 30,
+                "totalSteps": 3,
+                "updatedAt": "2024-03-12T12:00:00",
+                "featured": True,
+                "progress": [{"currentStep": "1", "completed": "50"}],
+                "steps": [
+                    {
+                        "order": 0,
+                        "title": "Step 1",
+                        "subtitle": "Subtitle 1",
+                        "content": "Content 1"
+                    },
+                    {
+                        "order": 1,
+                        "title": "Step 2",
+                        "subtitle": "Subtitle 2",
+                        "content": "Content 2"
+                    },
+                    {
+                        "order": 2,
+                        "title": "Step 3",
+                        "subtitle": "Subtitle 3",
+                        "content": "Content 3"
+                    }
+                ]
             },
             # Dummy Product 2
             {
@@ -242,6 +392,7 @@ async def create_dummy_records():
                 "name": "Dummy Product 2",
                 "handle": "dummy-product-2",
                 "description": "Another dummy product.",
+                "category": "leases",
                 "categories": ["Dummy Category"],
                 "tags": ["Dummy Tag"],
                 "featuredImageId": "2",
@@ -258,6 +409,33 @@ async def create_dummy_records():
                 "weight": "0.7kg",
                 "extraShippingFee": 7.5,
                 "active": True,
+                "title": "Dummy Product 2 Title",
+                "slug": "dummy-product-2-slug",
+                "duration": 45,
+                "totalSteps": 3,
+                "updatedAt": "2024-03-12T13:30:00",
+                "featured": False,
+                "progress": [{"currentStep": "1", "completed": "60"}],
+                "steps": [
+                    {
+                        "order": 0,
+                        "title": "Step 1",
+                        "subtitle": "Subtitle 1",
+                        "content": "Content 1"
+                    },
+                    {
+                        "order": 1,
+                        "title": "Step 2",
+                        "subtitle": "Subtitle 2",
+                        "content": "Content 2"
+                    },
+                    {
+                        "order": 2,
+                        "title": "Step 3",
+                        "subtitle": "Subtitle 3",
+                        "content": "Content 3"
+                    }
+                ]
             },
             # Dummy Product 3
             {
@@ -265,6 +443,7 @@ async def create_dummy_records():
                 "name": "Dummy Product 3",
                 "handle": "dummy-product-3",
                 "description": "Yet another dummy product.",
+                "category": "contracts",
                 "categories": ["Dummy Category"],
                 "tags": ["Dummy Tag"],
                 "featuredImageId": "3",
@@ -281,7 +460,34 @@ async def create_dummy_records():
                 "weight": "1.0kg",
                 "extraShippingFee": 10.0,
                 "active": True,
-            },
+                "title": "Dummy Product 3 Title",
+                "slug": "dummy-product-3-slug",
+                "duration": 60,
+                "totalSteps": 3,
+                "updatedAt": "2024-03-12T15:00:00",
+                "featured": True,
+                "progress": [{"currentStep": "1", "completed": "100"}],
+                "steps": [
+                    {
+                        "order": 0,
+                        "title": "Step 1",
+                        "subtitle": "Subtitle 1",
+                        "content": "Content 1"
+                    },
+                    {
+                        "order": 1,
+                        "title": "Step 2",
+                        "subtitle": "Subtitle 2",
+                        "content": "Content 2"
+                    },
+                    {
+                        "order": 2,
+                        "title": "Step 3",
+                        "subtitle": "Subtitle 3",
+                        "content": "Content 3"
+                    }
+                ]
+            }
         ]
 
         # Insert dummy records into the products table
@@ -301,6 +507,7 @@ async def create_database():
         return {"message": "Database created successfully with dummy records."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
 
 
 
@@ -397,3 +604,13 @@ async def get_all_sumdocs():
 @app.get("/summarizer/sumdocs", response_model=List[SumdocSchema])
 async def read_sumdocs():
     return await get_all_sumdocs()
+
+@app.get("/summarizer/sumdocs/{sumdoc_id}", response_model=SumdocSchema)
+async def read_sumdoc_id_by_id(sumdoc_id: str):
+    query = Sumdoc.__table__.select().where(Sumdoc.id == sumdoc_id)
+    sumdoc = await database.fetch_one(query)
+
+    if sumdoc:
+        return sumdoc
+    else:
+        raise HTTPException(status_code=404, detail="Document not found")
