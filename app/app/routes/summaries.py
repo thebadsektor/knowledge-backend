@@ -5,6 +5,7 @@ from app.models.models import Sumdoc
 from app.schemas.schemas import ProductSchema
 from app.schemas.schemas import SumdocSchema
 from app.database.database import database
+from openai import OpenAI
 from typing import List
 import uuid
 

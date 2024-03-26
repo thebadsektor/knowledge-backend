@@ -6,8 +6,6 @@ from sqlalchemy.orm import sessionmaker
 from databases import Database
 from typing import List
 from pydantic import BaseModel
-
-from openai import OpenAI
 import os
 from dotenv import load_dotenv
 load_dotenv()
