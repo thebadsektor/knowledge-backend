@@ -84,30 +84,68 @@ class ProductSchema(BaseModel):
 class Sumdoc(Base):
     __tablename__ = "sumdocs"
     id = Column(String, primary_key=True, index=True)
-    title = Column(String)
-    slug = Column(String)
+    name = Column(String)
+    handle = Column(String)
     description = Column(String)
     category = Column(String)
+    categories = Column(JSON)
+    tags = Column(JSON)
+    featuredImageId = Column(String)
+    images = Column(JSON)
+    priceTaxExcl = Column(Float)
+    priceTaxIncl = Column(Float)
+    taxRate = Column(Float)
+    comparedPrice = Column(Float)
+    quantity = Column(Float)
+    sku = Column(String)
+    width = Column(String)
+    height = Column(String)
+    depth = Column(String)
+    weight = Column(String)
+    extraShippingFee = Column(Float)
+    active = Column(Boolean)
+    title = Column(String)
+    slug = Column(String)
     duration = Column(Integer)
     totalSteps = Column(Integer)
     updatedAt = Column(String)
     featured = Column(Boolean)
     progress = Column(JSON)
     steps = Column(JSON)
+    summaries = Column(JSON)
 
 
 class SumdocSchema(BaseModel):
     id: str
-    title: str
-    slug: str
+    name: str
+    handle: str
     description: str
     category: str
+    categories: List[str]
+    tags: List[str]
+    featuredImageId: str
+    images: List[dict]
+    priceTaxExcl: float
+    priceTaxIncl: float
+    taxRate: float
+    comparedPrice: float
+    quantity: float
+    sku: str
+    width: str
+    height: str
+    depth: str
+    weight: str
+    extraShippingFee: float
+    active: bool
+    title: str
+    slug: str
     duration: int
     totalSteps: int
     updatedAt: str
     featured: bool
     progress: List[dict]
     steps: List[dict]
+    summaries: List[dict]
 
 # Define the FastAPI app
 app = FastAPI()
@@ -148,16 +186,35 @@ async def create_dummy_sumdocs():
             """
             CREATE TABLE sumdocs (
                 id TEXT PRIMARY KEY,
-                title TEXT,
-                slug TEXT,
+                name TEXT,
+                handle TEXT,
                 description TEXT,
                 category TEXT,
+                categories JSON,
+                tags JSON,
+                featuredImageId TEXT,
+                images JSON,
+                priceTaxExcl REAL,
+                priceTaxIncl REAL,
+                taxRate REAL,
+                comparedPrice REAL,
+                quantity REAL,
+                sku TEXT,
+                width TEXT,
+                height TEXT,
+                depth TEXT,
+                weight TEXT,
+                extraShippingFee REAL,
+                active BOOLEAN,
+                title TEXT,
+                slug TEXT,
                 duration INTEGER,
                 totalSteps INTEGER,
                 updatedAt TEXT,
                 featured BOOLEAN,
                 progress JSON,
-                steps JSON
+                steps JSON,
+                summaries JSON
             )
             """
         )
@@ -166,10 +223,28 @@ async def create_dummy_sumdocs():
         sumdocs = [
             {
                 "id": str(uuid.uuid4()),
-                "title": "Dummy Sumdoc 1",
-                "slug": "dummy-sumdoc-1",
-                "description": "This is a dummy sumdoc.",
-                "category": "leases",
+                "name": "Dummy Product 1",
+                "handle": "dummy-document-1",
+                "description": "This is a dummy document.",
+                "category": "contracts",
+                "categories": ["Dummy Category"],
+                "tags": ["Dummy Tag"],
+                "featuredImageId": "1",
+                "images": [{"id": "1", "url": "assets/images/apps/ecommerce/a-walk-amongst-friends.jpg"}],
+                "priceTaxExcl": 50.0,
+                "priceTaxIncl": 55.0,
+                "taxRate": 10.0,
+                "comparedPrice": 60.0,
+                "quantity": 100,
+                "sku": "SKU123",
+                "width": "10cm",
+                "height": "15cm",
+                "depth": "5cm",
+                "weight": "0.5kg",
+                "extraShippingFee": 5.0,
+                "active": True,
+                "title": "Dummy Document 1 Title",
+                "slug": "dummy-document-1-slug",
                 "duration": 30,
                 "totalSteps": 3,
                 "updatedAt": "2024-03-12T12:00:00",
@@ -177,31 +252,54 @@ async def create_dummy_sumdocs():
                 "progress": [{"currentStep": "1", "completed": "50"}],
                 "steps": [
                     {
-                    "order": 0,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
+                        "order": 0,
+                        "title": "Step 1",
+                        "subtitle": "Subtitle 1",
+                        "content": "Content 1"
                     },
                     {
-                    "order": 1,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
+                        "order": 1,
+                        "title": "Step 2",
+                        "subtitle": "Subtitle 2",
+                        "content": "Content 2"
                     },
                     {
-                    "order": 2,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
+                        "order": 2,
+                        "title": "Step 3",
+                        "subtitle": "Subtitle 3",
+                        "content": "Content 3"
                     }
+                ],
+                "summaries": [
+                    {"summary_a": [{"model": "Model A", "summary": "Summary A"}]},
+                    {"summary_b": [{"model": "Model B", "summary": "Summary B"}]}
                 ]
             },
+            # Dummy Product 2
             {
                 "id": str(uuid.uuid4()),
-                "title": "Dummy Sumdoc 2",
-                "slug": "dummy-sumdoc-2",
-                "description": "Another dummy sumdoc.",
-                "category": "contracts",
+                "name": "Dummy Product 2",
+                "handle": "dummy-document-2",
+                "description": "Another dummy document.",
+                "category": "leases",
+                "categories": ["Dummy Category"],
+                "tags": ["Dummy Tag"],
+                "featuredImageId": "2",
+                "images": [{"id": "2", "url": "assets/images/apps/ecommerce/braies-lake.jpg"}],
+                "priceTaxExcl": 75.0,
+                "priceTaxIncl": 82.5,
+                "taxRate": 10.0,
+                "comparedPrice": 90.0,
+                "quantity": 50,
+                "sku": "SKU456",
+                "width": "12cm",
+                "height": "18cm",
+                "depth": "6cm",
+                "weight": "0.7kg",
+                "extraShippingFee": 7.5,
+                "active": True,
+                "title": "Dummy Document 2 Title",
+                "slug": "dummy-document-2-slug",
                 "duration": 45,
                 "totalSteps": 3,
                 "updatedAt": "2024-03-12T13:30:00",
@@ -209,89 +307,87 @@ async def create_dummy_sumdocs():
                 "progress": [{"currentStep": "1", "completed": "60"}],
                 "steps": [
                     {
-                    "order": 0,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
+                        "order": 0,
+                        "title": "Step 1",
+                        "subtitle": "Subtitle 1",
+                        "content": "Content 1"
                     },
                     {
-                    "order": 1,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
+                        "order": 1,
+                        "title": "Step 2",
+                        "subtitle": "Subtitle 2",
+                        "content": "Content 2"
                     },
                     {
-                    "order": 2,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
+                        "order": 2,
+                        "title": "Step 3",
+                        "subtitle": "Subtitle 3",
+                        "content": "Content 3"
                     }
+                ],
+                "summaries": [
+                    {"summary_a": [{"model": "Model A", "summary": "Lorem ipsum 1"}]},
+                    {"summary_b": [{"model": "Model B", "summary": "Loreal ipsum 2"}]}
                 ]
             },
+            # Dummy Product 4
             {
                 "id": str(uuid.uuid4()),
-                "title": "Dummy Sumdoc 3",
-                "slug": "ip",
-                "description": "Yet another dummy sumdoc.",
-                "category": "leases",
-                "duration": 60,
-                "totalSteps": 3,
-                "updatedAt": "2024-03-12T15:00:00",
-                "featured": True,
-                "progress": [{"currentStep": "1", "completed": "100"}],
+                "name": "Eco-Friendly Water Bottle",
+                "handle": "eco-friendly-water-bottle",
+                "description": "A sustainable, durable water bottle for everyday use.",
+                "category": "Eco Products",
+                "categories": ["Sustainable Goods"],
+                "tags": ["Eco-Friendly", "Water Bottle", "Sustainable"],
+                "featuredImageId": "101",
+                "images": [
+                    {
+                    "id": "101",
+                    "url": "assets/images/products/eco-friendly-water-bottle.jpg"
+                    }
+                ],
+                "priceTaxExcl": 25.0,
+                "priceTaxIncl": 27.5,
+                "taxRate": 10.0,
+                "comparedPrice": 30.0,
+                "quantity": 150,
+                "sku": "EFWB1001",
+                "width": "7cm",
+                "height": "25cm",
+                "depth": "7cm",
+                "weight": "0.3kg",
+                "extraShippingFee": 5.0,
+                "active": True,
+                "title": "Stay Hydrated, Stay Green",
+                "slug": "eco-friendly-water-bottle",
+                "duration": 120,
+                "totalSteps": 2,
+                "updatedAt": "2024-05-20T10:00:00",
+                "featured": False,
+                "progress": [{"currentStep": "1", "completed": "50"}],
                 "steps": [
                     {
                     "order": 0,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
+                    "title": "Introduction to Sustainability",
+                    "subtitle": "Understanding the Impact",
+                    "content": "Exploring the importance of sustainability in everyday products."
                     },
                     {
                     "order": 1,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
+                    "title": "Product Usage and Care",
+                    "subtitle": "Maximizing Lifespan",
+                    "content": "Tips on using and caring for your water bottle to ensure it lasts a lifetime."
+                    }
+                ],
+                "summaries": [
+                    {
+                    "summary_a": [{"model": "Model Green", "summary": "Every sip supports sustainability."}]
                     },
                     {
-                    "order": 2,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
+                    "summary_b": [{"model": "Model Blue", "summary": "Designed for durability and eco-friendliness."}]
                     }
                 ]
-            },
-            {
-                "id": str(uuid.uuid4()),
-                "title": "Dummy Sumdoc 4",
-                "slug": "dummy-sumdoc-3",
-                "description": "Yet another dummy sumdoc.",
-                "category": "contracts",
-                "duration": 60,
-                "totalSteps": 3,
-                "updatedAt": "2024-03-12T15:00:00",
-                "featured": True,
-                "progress": [{"currentStep": "1", "completed": "100"}],
-                "steps": [
-                    {
-                    "order": 0,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
-                    },
-                    {
-                    "order": 1,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
-                    },
-                    {
-                    "order": 2,
-                    "title": "Get the sample code",
-                    "subtitle": "Where to find the sample code and how to access it",
-                    "content": "Get the sample code"
-                    }
-                ]
-            },
+            }
         ]
 
         # Insert dummy records into the products table
