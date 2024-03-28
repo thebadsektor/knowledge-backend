@@ -1,8 +1,6 @@
 # TODO: Disconnect from Products
 from fastapi import APIRouter, HTTPException
-from app.models.models import Product
 from app.models.models import Sumdoc
-from app.schemas.schemas import ProductSchema
 from app.schemas.schemas import SumdocSchema
 from app.database.database import database
 from openai import OpenAI
@@ -55,7 +53,7 @@ async def create_dummy_sumdocs():
         sumdocs = [
             {
                 "id": str(uuid.uuid4()),
-                "name": "Dummy Product 1",
+                "name": "Dummy Sumdoc 1",
                 "handle": "dummy-document-1",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at lobortis velit, vel commodo eros. Aliquam tincidunt justo sit amet nulla cursus, at finibus leo mattis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed pellentesque ante a enim scelerisque vestibulum. Duis ut eros eget libero ullamcorper aliquet. Fusce risus ipsum, mattis eu tristique non, dapibus nec arcu. Vivamus commodo interdum mi, eu convallis diam malesuada eu. Nam fringilla orci elit, vitae vehicula turpis posuere nec. Fusce facilisis nibh at ex efficitur, eget laoreet odio tincidunt. Fusce vitae facilisis odio, et semper est. Donec in interdum mi. Donec non sagittis orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis eu lectus imperdiet, suscipit nisl nec, maximus nisl.",
                 "category": "contracts",
@@ -107,10 +105,10 @@ async def create_dummy_sumdocs():
                     {"summary_b": [{"model": "Model B", "summary": "Summary B"}]}
                 ]
             },
-            # Dummy Product 2
+            # Dummy Sumdoc 2
             {
                 "id": str(uuid.uuid4()),
-                "name": "Dummy Product 2",
+                "name": "Dummy Sumdoc 2",
                 "handle": "dummy-document-2",
                 "description": "Duis suscipit interdum mauris, ut consectetur lorem lobortis in. Fusce auctor velit eu imperdiet molestie. Fusce urna felis, aliquet eget tincidunt at, scelerisque at nisl. Pellentesque venenatis tellus nec elit consequat dapibus. Suspendisse suscipit dolor ac lacus facilisis volutpat. Nam porta, sem quis aliquam vulputate, risus quam malesuada justo, sit amet eleifend enim magna id nunc. Morbi rhoncus magna ipsum. Nullam egestas neque metus, ac blandit est mollis ut.",
                 "category": "leases",
@@ -162,7 +160,7 @@ async def create_dummy_sumdocs():
                     {"summary_b": [{"model": "Model B", "summary": "Loreal ipsum 2"}]}
                 ]
             },
-            # Dummy Product 4
+            # Dummy Sumdoc 4
             {
                 "id": str(uuid.uuid4()),
                 "name": "Eco-Friendly Water Bottle",
@@ -206,7 +204,7 @@ async def create_dummy_sumdocs():
                     },
                     {
                     "order": 1,
-                    "title": "Product Usage and Care",
+                    "title": "Sumdoc Usage and Care",
                     "subtitle": "Maximizing Lifespan",
                     "content": "Tips on using and caring for your water bottle to ensure it lasts a lifetime."
                     }
@@ -222,7 +220,7 @@ async def create_dummy_sumdocs():
             }
         ]
 
-        # Insert dummy records into the products table
+        # Insert dummy records into the Sumdocs table
         for sumdoc in sumdocs:
             await database.execute(Sumdoc.__table__.insert().values(sumdoc))
 
@@ -286,14 +284,14 @@ async def summarize(model, document, prompt_template, max_length=4000):
     return response
 
 
-@router.post("/e-commerce/products", response_model=ProductSchema)
-async def create_product(product: ProductSchema):
-    new_product = product.dict()
+@router.post("/summarizer/sumdocs", response_model=SumdocSchema)
+async def create_sumdoc(sumdoc: SumdocSchema):
+    new_sumdoc = sumdoc.dict()
     
-    new_product["id"] = str(uuid.uuid4())
+    new_sumdoc["id"] = str(uuid.uuid4())
     
     # Assume description is the text you want to summarize
-    description = new_product.get("description", "")
+    description = new_sumdoc.get("description", "")
     
     if random.choice([True, False]):
         model_a = "gpt-4"
@@ -307,45 +305,47 @@ async def create_product(product: ProductSchema):
     summary_b_text = await summarize(model_b, description, prompt_template)
 
     # Here, you'll need to decide how to store these summaries.
-    # For simplicity, let's add them directly to the product dict.
+    # For simplicity, let's add them directly to the sumdoc dict.
     # This approach depends entirely on how your database and models are set up.
-    new_product["summaries"] = [
+    new_sumdoc["summaries"] = [
         {"summary_a": [{"model": model_a, "summary": summary_a_text}]},
         {"summary_b": [{"model": model_b, "summary": summary_b_text}]}
     ]
 
-    query = Product.__table__.insert().values(new_product)
-    product_id = await database.execute(query)
+    query = Sumdoc.__table__.insert().values(new_sumdoc)
+    sumdoc_id = await database.execute(query)
 
-    # Fetch the created product by its ID and return it in the response
-    created_product = await get_product_by_id(product_id)
-    return created_product
+    # Fetch the created Sumdoc by its ID and return it in the response
+    created_sumdoc = await get_sumdoc_by_id(sumdoc_id)
+    return created_sumdoc
 
-# Helper function to get a product by ID
-async def get_product_by_id(product_id: str):
-    query = Product.__table__.select().where(Product.id == product_id)
+# Helper function to get a Sumdoc by ID
+async def get_sumdoc_by_id(sumdoc_id: str):
+    query = Sumdoc.__table__.select().where(Sumdoc.id == sumdoc_id)
     return await database.fetch_one(query)
 
 import random
+from fastapi.encoders import jsonable_encoder
 
-@router.put("/e-commerce/products/{product_id}", response_model=ProductSchema)
-async def update_product(product_id: str, updated_product: ProductSchema):
-    # Check if the product with the given ID exists
-    existing_product = await get_product_by_id(product_id)
-    if not existing_product:
-        raise HTTPException(status_code=404, detail="Product not found")
+@router.put("/summarizer/sumdocs/{sumdoc_id}", response_model=SumdocSchema)
+async def update_sumdoc(sumdoc_id: str, updated_sumdoc: SumdocSchema):
+    # Check if the Sumdoc with the given ID exists
+
+    existing_sumdoc = await get_sumdoc_by_id(sumdoc_id)
+    if not existing_sumdoc:
+        raise HTTPException(status_code=404, detail="Sumdoc not found")
 
     # Convert SQLAlchemy model instance to dictionary for easier manipulation
-    existing_product_data = dict(existing_product)
+    existing_sumdoc_data = dict(existing_sumdoc)
 
-    # Update the existing product data with new data from updated_product
-    updated_product_data = updated_product.dict(exclude_unset=True)
-    for key, value in updated_product_data.items():
+    # Update the existing Sumdoc data with new data from updated_sumdoc
+    updated_sumdoc_data = updated_sumdoc.dict(exclude_unset=True)
+    for key, value in updated_sumdoc_data.items():
         if key != "summaries":  # Exclude summaries from direct update
-            existing_product_data[key] = value
+            existing_sumdoc_data[key] = value
 
     # Assume description is the text you want to summarize (from updated data if available)
-    description = updated_product_data.get("description", existing_product_data.get("description", ""))
+    description = updated_sumdoc_data.get("description", existing_sumdoc_data.get("description", ""))
 
     if random.choice([True, False]):
         model_a = "gpt-4"
@@ -358,19 +358,19 @@ async def update_product(product_id: str, updated_product: ProductSchema):
     summary_a_text = await summarize(model_a, description, prompt_template)
     summary_b_text = await summarize(model_b, description, prompt_template)
 
-    # Update the summaries in existing_product_data
-    existing_product_data["summaries"] = [
+    # Update the summaries in existing_sumdoc_data
+    existing_sumdoc_data["summaries"] = [
         {"summary_a": [{"model": model_a, "summary": summary_a_text}]},
         {"summary_b": [{"model": model_b, "summary": summary_b_text}]}
     ]
 
     # Commit the changes to the database
-    query = Product.__table__.update().where(Product.id == product_id).values(existing_product_data)
+    query = Sumdoc.__table__.update().where(Sumdoc.id == sumdoc_id).values(existing_sumdoc_data)
     await database.execute(query)
 
-    # Fetch the updated product by its ID and return it in the response
-    updated_product = await get_product_by_id(product_id)
-    return updated_product
+    # Fetch the updated Sumdoc by its ID and return it in the response
+    updated_sumdoc = await get_sumdoc_by_id(sumdoc_id)
+    return updated_sumdoc
 
 # Route to create the database and insert dummy records
 @router.post("/initialize_sumdocs")

@@ -222,6 +222,92 @@ async def create_dummy_records():
         for product in products:
             await database.execute(Product.__table__.insert().values(product))
 
+@router.post("/e-commerce/products", response_model=ProductSchema)
+async def create_product(product: ProductSchema):
+    new_product = product.dict()
+    
+    new_product["id"] = str(uuid.uuid4())
+    
+    # Assume description is the text you want to summarize
+    description = new_product.get("description", "")
+    
+    if random.choice([True, False]):
+        model_a = "gpt-4"
+        model_b = "gpt-3.5-turbo-0613"
+    else:
+        model_a = "gpt-3.5-turbo-0613"
+        model_b = "gpt-4"
+
+    # Run summarize() on two different models
+    summary_a_text = await summarize(model_a, description, prompt_template)
+    summary_b_text = await summarize(model_b, description, prompt_template)
+
+    # Here, you'll need to decide how to store these summaries.
+    # For simplicity, let's add them directly to the product dict.
+    # This approach depends entirely on how your database and models are set up.
+    new_product["summaries"] = [
+        {"summary_a": [{"model": model_a, "summary": summary_a_text}]},
+        {"summary_b": [{"model": model_b, "summary": summary_b_text}]}
+    ]
+
+    query = Product.__table__.insert().values(new_product)
+    product_id = await database.execute(query)
+
+    # Fetch the created product by its ID and return it in the response
+    created_product = await get_product_by_id(product_id)
+    return created_product
+
+# Helper function to get a product by ID
+async def get_product_by_id(product_id: str):
+    query = Product.__table__.select().where(Product.id == product_id)
+    return await database.fetch_one(query)
+
+import random
+
+@router.put("/e-commerce/products/{product_id}", response_model=ProductSchema)
+async def update_product(product_id: str, updated_product: ProductSchema):
+    # Check if the product with the given ID exists
+    existing_product = await get_product_by_id(product_id)
+    if not existing_product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # Convert SQLAlchemy model instance to dictionary for easier manipulation
+    existing_product_data = dict(existing_product)
+
+    # Update the existing product data with new data from updated_product
+    updated_product_data = updated_product.dict(exclude_unset=True)
+    for key, value in updated_product_data.items():
+        if key != "summaries":  # Exclude summaries from direct update
+            existing_product_data[key] = value
+
+    # Assume description is the text you want to summarize (from updated data if available)
+    description = updated_product_data.get("description", existing_product_data.get("description", ""))
+
+    if random.choice([True, False]):
+        model_a = "gpt-4"
+        model_b = "gpt-3.5-turbo-0613"
+    else:
+        model_a = "gpt-3.5-turbo-0613"
+        model_b = "gpt-4"
+
+    # Run summarize() on two different models
+    summary_a_text = await summarize(model_a, description, prompt_template)
+    summary_b_text = await summarize(model_b, description, prompt_template)
+
+    # Update the summaries in existing_product_data
+    existing_product_data["summaries"] = [
+        {"summary_a": [{"model": model_a, "summary": summary_a_text}]},
+        {"summary_b": [{"model": model_b, "summary": summary_b_text}]}
+    ]
+
+    # Commit the changes to the database
+    query = Product.__table__.update().where(Product.id == product_id).values(existing_product_data)
+    await database.execute(query)
+
+    # Fetch the updated product by its ID and return it in the response
+    updated_product = await get_product_by_id(product_id)
+    return updated_product
+
 # Function to get all records from the "products" table
 async def get_all_products():
     query = Product.__table__.select()
