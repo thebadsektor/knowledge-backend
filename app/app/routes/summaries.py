@@ -400,3 +400,13 @@ async def read_sumdoc_id_by_id(sumdoc_id: str):
         return sumdoc
     else:
         raise HTTPException(status_code=404, detail="Document not found")
+    
+@router.delete("/summarizer/sumdocs/{sumdoc_id}", response_model=dict)
+async def delete_sumdoc_by_id(sumdoc_id: str):
+    query = Sumdoc.__table__.delete().where(Sumdoc.id == sumdoc_id)
+    deleted_rows = await database.execute(query)
+
+    if deleted_rows:
+        return {"message": f"Product with ID {sumdoc_id} deleted successfully"}
+    else:
+        raise HTTPException(status_code=404, detail=f"Product with ID {sumdoc_id} not found")
