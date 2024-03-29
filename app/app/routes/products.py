@@ -4,6 +4,7 @@ from app.schemas.schemas import ProductSchema
 from app.database.database import database
 from typing import List
 import uuid
+from app.routes.summaries import summarize, prompt_template
 
 router = APIRouter()
 
