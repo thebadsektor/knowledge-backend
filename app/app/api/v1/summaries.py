@@ -1,15 +1,18 @@
-# TODO: Disconnect from Products
+import uuid
+import random
+from typing import List
+
 from fastapi import APIRouter, HTTPException
+from openai import OpenAI
+
 from app.models.models import Sumdoc
 from app.schemas.schemas import SumdocSchema
 from app.database.database import database
-from openai import OpenAI
-from typing import List
-import uuid
+from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
 
-async def create_dummy_sumdocs():
+async def create_dummy_documents():
     async with database.transaction():
         await database.execute("DROP TABLE IF EXISTS sumdocs")
         await database.execute(
@@ -284,8 +287,8 @@ async def summarize(model, document, prompt_template, max_length=4000):
     return response
 
 
-@router.post("/summarizer/sumdocs", response_model=SumdocSchema)
-async def create_sumdoc(sumdoc: SumdocSchema):
+@router.post("/documents", response_model=SumdocSchema)
+async def create_document(sumdoc: SumdocSchema):
     new_sumdoc = sumdoc.dict()
     
     new_sumdoc["id"] = str(uuid.uuid4())
@@ -313,25 +316,22 @@ async def create_sumdoc(sumdoc: SumdocSchema):
     ]
 
     query = Sumdoc.__table__.insert().values(new_sumdoc)
-    sumdoc_id = await database.execute(query)
+    document_id = await database.execute(query)
 
     # Fetch the created Sumdoc by its ID and return it in the response
-    created_sumdoc = await get_sumdoc_by_id(sumdoc_id)
+    created_sumdoc = await get_document_by_id(document_id)
     return created_sumdoc
 
 # Helper function to get a Sumdoc by ID
-async def get_sumdoc_by_id(sumdoc_id: str):
-    query = Sumdoc.__table__.select().where(Sumdoc.id == sumdoc_id)
+async def get_document_by_id(document_id: str):
+    query = Sumdoc.__table__.select().where(Sumdoc.id == document_id)
     return await database.fetch_one(query)
 
-import random
-from fastapi.encoders import jsonable_encoder
-
-@router.put("/summarizer/sumdocs/{sumdoc_id}", response_model=SumdocSchema)
-async def update_sumdoc(sumdoc_id: str, updated_sumdoc: SumdocSchema):
+@router.put("/documents/{document_id}", response_model=SumdocSchema)
+async def update_document(document_id: str, updated_sumdoc: SumdocSchema):
     # Check if the Sumdoc with the given ID exists
 
-    existing_sumdoc = await get_sumdoc_by_id(sumdoc_id)
+    existing_sumdoc = await get_document_by_id(document_id)
     if not existing_sumdoc:
         raise HTTPException(status_code=404, detail="Sumdoc not found")
 
@@ -365,35 +365,35 @@ async def update_sumdoc(sumdoc_id: str, updated_sumdoc: SumdocSchema):
     ]
 
     # Commit the changes to the database
-    query = Sumdoc.__table__.update().where(Sumdoc.id == sumdoc_id).values(existing_sumdoc_data)
+    query = Sumdoc.__table__.update().where(Sumdoc.id == document_id).values(existing_sumdoc_data)
     await database.execute(query)
 
     # Fetch the updated Sumdoc by its ID and return it in the response
-    updated_sumdoc = await get_sumdoc_by_id(sumdoc_id)
+    updated_sumdoc = await get_document_by_id(document_id)
     return updated_sumdoc
 
 # Route to create the database and insert dummy records
-@router.post("/initialize_sumdocs")
+@router.post("/initialize_database")
 async def create_database():
     try:
-        await create_dummy_sumdocs()
+        await create_dummy_documents()
         return {"message": "Database created successfully with dummy records."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 # Function to get all records from the "products" table
-async def get_all_sumdocs():
+async def get_all_documents():
     query = Sumdoc.__table__.select()
     return await database.fetch_all(query)
 
 # New route to get all records from the "products" table
-@router.get("/summarizer/sumdocs", response_model=List[SumdocSchema])
-async def read_sumdocs():
-    return await get_all_sumdocs()
+@router.get("/documents", response_model=List[SumdocSchema])
+async def read_documents():
+    return await get_all_documents()
 
-@router.get("/summarizer/sumdocs/{sumdoc_id}", response_model=SumdocSchema)
-async def read_sumdoc_id_by_id(sumdoc_id: str):
-    query = Sumdoc.__table__.select().where(Sumdoc.id == sumdoc_id)
+@router.get("/documents/{document_id}", response_model=SumdocSchema)
+async def read_document_by_id(document_id: str):
+    query = Sumdoc.__table__.select().where(Sumdoc.id == document_id)
     sumdoc = await database.fetch_one(query)
 
     if sumdoc:
@@ -401,12 +401,12 @@ async def read_sumdoc_id_by_id(sumdoc_id: str):
     else:
         raise HTTPException(status_code=404, detail="Document not found")
     
-@router.delete("/summarizer/sumdocs/{sumdoc_id}", response_model=dict)
-async def delete_sumdoc_by_id(sumdoc_id: str):
-    query = Sumdoc.__table__.delete().where(Sumdoc.id == sumdoc_id)
+@router.delete("/documents/{document_id}", response_model=dict)
+async def delete_document_by_id(document_id: str):
+    query = Sumdoc.__table__.delete().where(Sumdoc.id == document_id)
     deleted_rows = await database.execute(query)
 
     if deleted_rows:
-        return {"message": f"Product with ID {sumdoc_id} deleted successfully"}
+        return {"message": f"Product with ID {document_id} deleted successfully"}
     else:
-        raise HTTPException(status_code=404, detail=f"Product with ID {sumdoc_id} not found")
+        raise HTTPException(status_code=404, detail=f"Product with ID {document_id} not found")
