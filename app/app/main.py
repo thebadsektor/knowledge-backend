@@ -17,8 +17,30 @@ from .api.v1 import summaries
 from typing import List, Dict, Any
 import asyncio
 
+tags_metadata = [
+    {
+        "name": "Summaries",
+        "description": "Operations with items. Manage items, search, and more.",
+        "externalDocs": {
+            "description": "Items external docs",
+            "url": "https://example.com/items-docs",
+        },
+    },
+    {
+        "name": "Utilities",
+        "description": "Operations with items. Manage items, search, and more.",
+        "externalDocs": {
+            "description": "Items external docs",
+            "url": "https://example.com/items-docs",
+        },
+    }
+]
+
 # Define the FastAPI app
-app = FastAPI()
+app = FastAPI(openapi_tags=tags_metadata,
+              title='Knowledge Research Inc. API',
+              description='Knowledge Research Inc.'
+              )
 
 # Configure CORS
 
@@ -40,7 +62,7 @@ app.add_middleware(
 app.include_router(summaries.router, prefix="/api/v1/summaries")
 
 
-@app.get("/heartbeat")
+@app.get("/heartbeat", tags=["Utilities"])
 async def heartbeat():
     try:
         client = OpenAI()

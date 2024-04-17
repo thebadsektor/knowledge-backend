@@ -287,7 +287,7 @@ async def summarize(model, document, prompt_template, max_length=4000):
     return response
 
 
-@router.post("/documents", response_model=SumdocSchema)
+@router.post("/documents", response_model=SumdocSchema, tags=["Summaries"])
 async def create_document(sumdoc: SumdocSchema):
     new_sumdoc = sumdoc.dict()
     
@@ -327,7 +327,7 @@ async def get_document_by_id(document_id: str):
     query = Sumdoc.__table__.select().where(Sumdoc.id == document_id)
     return await database.fetch_one(query)
 
-@router.put("/documents/{document_id}", response_model=SumdocSchema)
+@router.put("/documents/{document_id}", response_model=SumdocSchema, tags=["Summaries"])
 async def update_document(document_id: str, updated_sumdoc: SumdocSchema):
     # Check if the Sumdoc with the given ID exists
 
@@ -373,7 +373,7 @@ async def update_document(document_id: str, updated_sumdoc: SumdocSchema):
     return updated_sumdoc
 
 # Route to create the database and insert dummy records
-@router.post("/initialize_database")
+@router.post("/initialize_database", tags=["Summaries"])
 async def create_database():
     try:
         await create_dummy_documents()
@@ -387,11 +387,11 @@ async def get_all_documents():
     return await database.fetch_all(query)
 
 # New route to get all records from the "products" table
-@router.get("/documents", response_model=List[SumdocSchema])
+@router.get("/documents", response_model=List[SumdocSchema], tags=["Summaries"])
 async def read_documents():
     return await get_all_documents()
 
-@router.get("/documents/{document_id}", response_model=SumdocSchema)
+@router.get("/documents/{document_id}", response_model=SumdocSchema, tags=["Summaries"])
 async def read_document_by_id(document_id: str):
     query = Sumdoc.__table__.select().where(Sumdoc.id == document_id)
     sumdoc = await database.fetch_one(query)
@@ -401,7 +401,7 @@ async def read_document_by_id(document_id: str):
     else:
         raise HTTPException(status_code=404, detail="Document not found")
     
-@router.delete("/documents/{document_id}", response_model=dict)
+@router.delete("/documents/{document_id}", response_model=dict, tags=["Summaries"])
 async def delete_document_by_id(document_id: str):
     query = Sumdoc.__table__.delete().where(Sumdoc.id == document_id)
     deleted_rows = await database.execute(query)
