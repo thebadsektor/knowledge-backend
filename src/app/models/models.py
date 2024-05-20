@@ -68,3 +68,11 @@ class Sumdoc(Base):
     progress = Column(JSON)
     steps = Column(JSON)
     summaries = Column(JSON)
+
+class Summary(Base):
+    __tablename__ = "summaries"
+    id = Column(String, primary_key=True, index=True)
+    model = Column(String)
+    content = Column(String)
+    updatedAt = Column(String)
+    createdAt = Column(String)
