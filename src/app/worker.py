@@ -11,10 +11,10 @@ celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
 api_key = os.environ.get("OPENAI_API_KEY")
 
-# @celery.task(name="create_task")
-# def create_task(task_type):
-#     time.sleep(int(task_type) * 10)
-#     return True
+@celery.task(name="create_task")
+def create_task(task_type):
+    time.sleep(int(task_type) * 10)
+    return True
 
 @celery.task(name="summarize_task")
 def summarize_task(model, document):

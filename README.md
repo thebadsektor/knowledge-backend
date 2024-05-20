@@ -8,7 +8,7 @@
     │   └── app/
     │       ├── api/
     │       │   ├── v1/
-    │       │   │   ├── summarize.py
+    │       │   │   ├── summaries.py
     │       │   │   └── summary_tasks.py
     │       │   └── v2/
     │       │       └── summaries.py
@@ -16,6 +16,7 @@
     │       │   └── database.py
     │       ├── documents/ #For testing celery job queue/
     │       │   └── document-1-357-1697.txt
+    │       │   └── document-2-2035-10856.txt
     │       ├── logs/
     │       │   ├── .gitkeep
     │       │   └── celery.log
