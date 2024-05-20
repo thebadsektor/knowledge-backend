@@ -1,0 +1,70 @@
+WEBSITE DESIGN AGREEMENT
+
+This Website Design Agreement ("Agreement") is made and entered into as of [Effective Date] ("Effective Date") by and between [Client's Full Legal Name], a [Type of Entity, e.g., Corporation, LLC] organized under the laws of [State/Country], with its principal office located at [Client's Address] ("Client"), and [Designer's Full Legal Name], a professional web designer, doing business as [Business Name] with a business address at [Designer's Address] ("Designer"). Each party to this Agreement may be referred to individually as a "Party" and collectively as the "Parties".
+
+1. PROJECT OVERVIEW AND SCOPE
+
+The Client wishes to engage the Designer to design, develop, and deploy a website that effectively represents the Client's brand and serves its business needs. The project will be executed according to the following detailed specifications and features:
+
+Objective: To create an engaging, visually appealing, and user-friendly website that increases user interaction and supports sales efforts.
+Scope of Work:
+Design Requirements: Development of a unique visual style that complements the Client's branding, including custom graphics, typographic style, and interactive elements.
+Development Requirements: Building a responsive website that functions seamlessly across various devices and platforms, using HTML5, CSS3, and JavaScript.
+Functionality Requirements: Implementation of advanced features such as user account creation, real-time chat support, an e-commerce storefront with secure payment integration, and an administrative dashboard for order and content management.
+Content Requirements: Collaboration on content strategy, including SEO-optimized text, high-quality photography, and video content.
+Compliance Requirements: Ensuring the website complies with applicable standards such as ADA (Americans with Disabilities Act) for accessibility and GDPR (General Data Protection Regulation) for data protection.
+2. COST & PAYMENT TERMS
+
+Total Project Cost: The total project cost is set at [Total Project Cost], payable according to the following schedule:
+Initial Deposit: [Percentage, e.g., 30%] due upon execution of this Agreement.
+Milestone Payments: Payment tied to the completion of key project phases:
+After design approval: [Percentage, e.g., 20%]
+After development completion: [Percentage, e.g., 20%]
+Prior to website launch: [Percentage, e.g., 20%]
+Final Payment: The remaining balance due upon the Client's final acceptance of the completed website.
+Additional Services: Services not included in the initial scope of work will be billed at an hourly rate of [Rate, e.g., $100/hour].
+3. DELIVERABLES AND REVISIONS
+
+Deliverables: The Designer will provide preliminary design concepts, a fully functional beta site for review, and the final website ready for public launch.
+Revision Policy: The Client is entitled to [Number, e.g., three] rounds of revisions at no additional cost during the design phase. Subsequent revisions will be charged at the standard hourly rate.
+4. PROJECT TIMELINE
+
+Design Phase Start Date: [Date]
+Beta Launch Date: [Date]
+Final Review and Adjustments: [Date]
+Official Launch Date: [Date]
+Post-Launch Support: [Duration, e.g., three months] of support following the launch date, addressing minor adjustments and resolving any technical issues.
+5. COPYRIGHT, OWNERSHIP, AND LICENSES
+
+Copyright Notice: "© [Year] [Client's Name]" will appear on all main pages.
+Ownership of Digital Assets: Upon final payment, all digital assets created specifically for the project will transfer to the Client. The Designer retains ownership of any generic templates and pre-existing materials.
+Licensing: The Client will receive a perpetual, worldwide license to use the final website and its contents for commercial and promotional purposes.
+6. INDEPENDENT CONTRACTOR STATUS
+
+The Designer is engaged as an independent contractor, responsible for all taxes and expenses related to their services. This engagement does not create an employer-employee relationship.
+
+7. TERMINATION CONDITIONS
+
+By Client: Termination upon 10 days' notice if the Designer fails to meet specified milestones after receiving detailed notice of deficiencies.
+By Designer: Termination upon 5 days' notice if the Client fails to make timely payments as outlined in the payment terms.
+8. LIMITATIONS OF LIABILITY
+
+Neither Party shall be liable for indirect or consequential damages. The Designer's liability for any direct damages or claims shall not exceed the total amount paid by the Client under this Agreement.
+
+9. DISPUTE RESOLUTION AND LEGAL FEES
+
+In case of a dispute, the Parties will first attempt to resolve it through mediation. If mediation fails, the dispute will be settled by binding arbitration. The prevailing party in any dispute resolution process will be entitled to recover its reasonable legal costs and fees.
+
+10. NOTICE
+
+All official communications must be sent to the addresses specified above via certified mail or email with confirmation of receipt.
+
+11. SIGNATORY AUTHORITY
+
+Each person signing this Agreement warrants that they are duly authorized to do so and to bind the respective Party.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the Effective Date.
+
+[Designer's Signature Line]
+
+[Client's Signature Line]

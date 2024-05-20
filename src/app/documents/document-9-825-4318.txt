@@ -1,0 +1,65 @@
+NON-DISCLOSURE AGREEMENT
+
+This Non-Disclosure Agreement ("Agreement") is entered into as of [Enter Date] ("Effective Date") by and between [Production Company Name], a [State/Country] corporation with its principal place of business at [Address] ("Disclosing Party"), and [Recipient Name], [describe relationship, e.g., an independent contractor, consultant, employee] residing at [Address] ("Receiving Party"). Collectively referred to as the "Parties" and individually as a "Party."
+
+1. PURPOSE
+
+The Disclosing Party intends to disclose certain confidential and proprietary information ("Confidential Information") to the Receiving Party for the purpose of [describe purpose, e.g., evaluating engagement in the development, production, and post-production of the film franchise titled "[Film Franchise Name]"].
+
+2. DEFINITION OF CONFIDENTIAL INFORMATION
+
+For purposes of this Agreement, "Confidential Information" includes all written, electronic, or oral information that the Receiving Party receives from the Disclosing Party, including but not limited to, business operations, strategies, casting, scripts, storylines, marketing strategies, financial information, and other proprietary information.
+
+3. OBLIGATIONS OF THE RECEIVING PARTY
+
+The Receiving Party agrees to:
+
+Keep the Confidential Information confidential and not disclose it to any third party without the prior written consent of the Disclosing Party.
+Use the Confidential Information solely to evaluate or engage in the Project as outlined in the Purpose section of this Agreement.
+Take all necessary steps to protect the confidentiality of the Confidential Information, which shall not be less restrictive than the protection it provides to its own similar confidential information.
+4. EXCLUSIONS FROM CONFIDENTIAL INFORMATION
+
+Confidential Information does not include information that:
+
+Is or becomes publicly known through no breach of this Agreement by the Receiving Party;
+Is received from a third party without breach of any obligation of confidentiality;
+Is independently developed by the Receiving Party without use of or reference to the Disclosing Party’s Confidential Information;
+Is disclosed under the order of a court or governmental agency.
+5. TERM
+
+The obligations of this Agreement shall remain in effect until the Confidential Information no longer qualifies as confidential or until terminated by either Party with thirty (30) days written notice to the other Party.
+
+6. RETURN OF MATERIALS
+
+Upon termination of this Agreement, the Receiving Party agrees to return all materials containing Confidential Information to the Disclosing Party or certify in writing that all such material has been destroyed.
+
+7. NO LICENSE
+
+Nothing in this Agreement grants the Receiving Party any rights in or to the Confidential Information except as expressly set forth herein.
+
+8. NO WARRANTIES
+
+The Disclosing Party makes no representation or warranty as to the accuracy or completeness of the Confidential Information.
+
+9. REMEDIES
+
+The Receiving Party agrees that any violation or threatened violation of this Agreement may cause irreparable injury to the Disclosing Party, entitling the Disclosing Party to seek injunctive relief in addition to all legal remedies.
+
+10. MISCELLANEOUS
+
+Jurisdiction and Governing Law: This Agreement shall be governed by and construed in accordance with the laws of the State/Country of [Specify State/Country], without reference to its conflicts of laws principles.
+Entire Agreement: This Agreement constitutes the entire agreement between the Parties regarding its subject matter and supersedes all prior agreements and understandings, both written and oral, between the Parties with respect to its subject matter.
+Amendment: No amendment, modification, or waiver of any provision of this Agreement shall be effective unless in writing and signed by both Parties.
+Severability: If any term of this Agreement is found to be unenforceable or invalid, that term will be limited or eliminated to the minimum extent necessary so that this Agreement will otherwise remain in full force and effect and enforceable.
+IN WITNESS WHEREOF, the Parties have executed this Non-Disclosure Agreement as of the Effective Date.
+
+[Signature of Disclosing Party]
+
+Name:
+Title:
+Date:
+
+[Signature of Receiving Party]
+
+Name:
+Date:

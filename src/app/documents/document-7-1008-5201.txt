@@ -1,0 +1,73 @@
+WEBSITE DESIGN AGREEMENT
+
+This Website Design Agreement (the "Agreement") is entered into on [Effective Date] (the "Effective Date") by and between [Client's Full Legal Name], a corporation incorporated under the laws of [State/Country], with its principal office located at [Client's Address] (the "Client"), and [Designer's Full Legal Name], a freelance designer, with a business address at [Designer's Address] (the "Designer"). Each may be referred to herein individually as a "Party" and collectively as the "Parties".
+
+1. PROJECT DESCRIPTION
+The Client desires to engage the Designer to develop a website (the "Project"). The Project will include the following specifications and features:
+
+Purpose and Scope: [Detailed description of the purpose of the website and the scope of work, including any specific functionality and features required by the Client.]
+Target Audience: [Description of the target audience for the website.]
+Design Requirements: [Detailed list of design requirements, including color schemes, layout preferences, typography, etc.]
+Technical Specifications: [List of technical specifications, including platform, programming languages, compliance standards, etc.]
+2. COST & PAYMENT
+The total cost of the Project is [Total Project Cost], structured as follows:
+
+Initial Deposit: [Amount], due upon execution of this Agreement.
+Milestone Payments: [Details of any milestone payments, if applicable, along with associated deliverables and due dates.]
+Final Payment: The remaining balance is due upon the Client's acceptance of the completed Project.
+3. REVISIONS
+The Client is entitled to [number] revisions of the deliverables. Any additional revisions beyond the initial agreed number will incur charges at a rate of [rate] per revision.
+
+4. PROJECT SCHEDULE
+The Parties agree to adhere to the following schedule:
+
+Preliminary Design Due: [Date]
+Client Review: [Date]
+Revised Design Due (if applicable): [Date]
+Final Design Approval: [Date]
+Final Website Deployment: [Date]
+Note: The final review by the Client must include comprehensive feedback and approval. This is the final opportunity for adjustments before deployment.
+5. TECHNICAL SUPPORT
+The Designer will provide [number of days/weeks/months] of technical support following the deployment of the website. This support includes addressing technical issues and making minor adjustments to the functionality as described in the scope of the Project.
+
+6. COPYRIGHT AND PROPRIETARY RIGHTS
+
+Copyright Notice: A notice ("© [Year] [Client's Name]") will be displayed on each page of the website.
+Confidentiality: The Designer agrees to keep all proprietary information disclosed by the Client confidential and not to use it except for the purpose of completing the Project.
+Ownership Rights: Upon final payment, the Client will own the final website design and all its contents. The Designer retains no rights to the Client's proprietary information but maintains rights to any template designs created before and during the execution of this Agreement.
+7. ASSIGNMENT
+Neither Party may assign their rights and/or obligations under this Agreement without the written consent of the other Party.
+
+8. TERMINATION
+
+By the Client: The Client may terminate this Agreement with [number] days' prior written notice if the Designer fails to meet the agreed standards or correct a breach within ten (10) days after receiving notice of such.
+By the Designer: The Designer may terminate this Agreement with [number] days' prior written notice if the Client fails to make due payments or correct a breach within five (5) days after receiving notice.
+9. LIMITATION OF LIABILITY
+Neither Party shall be liable for indirect, special, or consequential damages arising out of this Agreement, including but not limited to, loss of revenue or anticipated profits.
+
+10. DISPUTE RESOLUTION
+
+Governing Law: This Agreement is governed by the laws of [Applicable Jurisdiction].
+Negotiation and Mediation: The Parties agree to first attempt to resolve any dispute through negotiation and, if necessary, through mediation.
+Arbitration: If unresolved through mediation, disputes will be settled through binding arbitration.
+Attorney's Fees: The prevailing party in any arbitration or mediation will be entitled to recover its attorney's fees and costs from the other party.
+11. SEVERABILITY
+If any provision of this Agreement is found invalid or unenforceable, the remaining sections will continue to be valid and enforceable.
+
+12. ENTIRE AGREEMENT
+This document represents the complete agreement between the Parties concerning its subject matter and supersedes all prior agreements and representations. Any amendments must be in writing and signed by both Parties.
+
+13. NOTICES
+All notices under this Agreement must be sent by email with read receipt requested or by certified or registered mail with return receipt requested, to the addresses listed at the beginning of this Agreement.
+
+SIGNATURES
+
+Designer:
+Signed: _______________________________
+Name: _______________________________
+Date: _______________________________
+
+Client:
+Signed: _______________________________
+Name: _______________________________
+Date: _______________________________
