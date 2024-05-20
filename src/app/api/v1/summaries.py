@@ -3,12 +3,15 @@ import random
 from typing import List
 
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from openai import OpenAI
 
 from models.models import Sumdoc
 from schemas.schemas import SumdocSchema
 from database.database import database
 from fastapi.encoders import jsonable_encoder
+
+from worker import summarize_task
 
 router = APIRouter()
 
@@ -410,3 +413,82 @@ async def delete_document_by_id(document_id: str):
         return {"message": f"Product with ID {document_id} deleted successfully"}
     else:
         raise HTTPException(status_code=404, detail=f"Product with ID {document_id} not found")
+    
+
+@router.post("/summarize-task", status_code=201, tags=["Summarization Tasks"],
+          description="""
+          Submit a single document for summarization from a text file:
+          
+          - document-1-357-1697.txt (357 Tokens): Will and Estate
+          
+          The operation returns task IDs for the summarization task.
+          """)
+def summarize_task_endpoint():
+    model = "gpt-3.5-turbo-0613"
+    document_1 = read_text_file("documents/document-1-357-1697.txt")
+    task_1 = summarize_task.delay(model, document_1)
+    return JSONResponse({"task_ids": {"document_1": task_1.id}})
+
+
+@router.post("/batch-summarize-task", status_code=201, tags=["Summarization Tasks"],
+          description="""
+          Submit multiple documents for summarization. Each document content should be passed as a plain text input.
+          
+          This endpoint is designed to submit 10 summarization tasks from text files:
+          
+          - document-1-357-1697.txt (357 Tokens): Will and Estate
+          - document-2-2035-10856.txt (2,035 Tokens): Environmental Policy
+          - document-3-388-1786.txt (388 Tokens): Will and Estate
+          - document-4-733-3229.txt (733 Tokens): Will and Estate
+          - document-5-649-2820.txt (649 Tokens): Will and Estate
+          - document-6-1401-7828.txt (1,201 Tokens): Marketing Services Agreement
+          - document-7-1008-5201.txt (1,008 Tokens): Website Development Agreement
+          - document-8-1047-5303.txt (1,047 Tokens): Website Development Agreement
+          - document-9-825-4318.txt (825 Tokens): Non-Disclosure Agrement
+          - document-10-1173-5362.txt (1,173 Tokens): Loan Agreement
+          
+          Returns a dictionary of task IDs for each summarization task.
+          """)
+def batch_summarize_task_endpoint():
+    
+    model = "gpt-3.5-turbo-0613"
+    document_1 = read_text_file("documents/document-1-357-1697.txt")
+    document_2 = read_text_file("documents/document-2-2035-10856.txt")
+    document_3 = read_text_file("documents/document-3-388-1786.txt")
+    document_4 = read_text_file("documents/document-4-733-3229.txt")
+    document_5 = read_text_file("documents/document-5-649-2820.txt")
+    document_6 = read_text_file("documents/document-6-1401-7828.txt")
+    document_7 = read_text_file("documents/document-7-1008-5201.txt")
+    document_8 = read_text_file("documents/document-8-1047-5303.txt")
+    document_9 = read_text_file("documents/document-9-825-4318.txt")
+    document_10 = read_text_file("documents/document-10-1173-5362.txt")
+    task_1 = summarize_task.delay(model, document_1)
+    task_2 = summarize_task.delay(model, document_2)
+    task_3 = summarize_task.delay(model, document_3)
+    task_4 = summarize_task.delay(model, document_4)
+    task_5 = summarize_task.delay(model, document_5)
+    task_6 = summarize_task.delay(model, document_6)
+    task_7 = summarize_task.delay(model, document_7)
+    task_8 = summarize_task.delay(model, document_8)
+    task_9 = summarize_task.delay(model, document_9)
+    task_10 = summarize_task.delay(model, document_10)
+    return JSONResponse({
+        "task_ids": {
+            "document_1": task_1.id,
+            "document_2": task_2.id,
+            "document_3": task_3.id,
+            "document_4": task_4.id,
+            "document_5": task_5.id,
+            "document_6": task_6.id,
+            "document_7": task_7.id,
+            "document_8": task_8.id,
+            "document_9": task_9.id,
+            "document_10": task_10.id
+        }
+    })
+
+
+def read_text_file(file_path: str) -> str:
+    """Utility function to read text from a given file path."""
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return file.read()

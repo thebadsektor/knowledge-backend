@@ -2,7 +2,7 @@ import os
 import time
 import asyncio
 from openai import OpenAI
-# from services.summary_services import summarize
+from services.summary_services import summarize
 
 from celery import Celery
 
@@ -16,8 +16,8 @@ api_key = os.environ.get("OPENAI_API_KEY")
 #     time.sleep(int(task_type) * 10)
 #     return True
 
-# @celery.task(name="summarize_task")
-# def summarize_task(model, document):
-#     loop = asyncio.get_event_loop()
-#     result = loop.run_until_complete(summarize(api_key, model, document))
-#     return result
+@celery.task(name="summarize_task")
+def summarize_task(model, document):
+    loop = asyncio.get_event_loop()
+    result = loop.run_until_complete(summarize(api_key, model, document))
+    return result
