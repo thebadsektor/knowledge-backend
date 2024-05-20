@@ -2,7 +2,7 @@ import os
 import time
 import asyncio
 from openai import OpenAI
-from services.summary_services import summarize
+from services.v1.summary_services import summarize
 
 from celery import Celery
 
