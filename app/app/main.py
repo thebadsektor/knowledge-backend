@@ -16,6 +16,7 @@ from .database.database import database
 from .api.v1 import summaries
 from typing import List, Dict, Any
 import asyncio
+from openai import OpenAI
 
 tags_metadata = [
     {
