@@ -64,14 +64,3 @@ class SumdocSchema(BaseModel):
     progress: List[dict]
     steps: List[dict]
     summaries: List[dict]
-
-class SummaryTaskSchema(BaseModel):
-    id: str
-    sumdocId: str
-    status: str
-    errorMessage: str
-    model: str
-    summary: str
-    retryCount: int
-    createdAt: str
-    updatedAt: str
