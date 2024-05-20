@@ -64,3 +64,12 @@ class SumdocSchema(BaseModel):
     progress: List[dict]
     steps: List[dict]
     summaries: List[dict]
+
+
+class SummarySchema(BaseModel):
+    id : str
+    doc_id: str
+    model: str
+    content: str
+    updatedAt: str
+    createdAt: str
