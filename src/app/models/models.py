@@ -72,6 +72,7 @@ class Sumdoc(Base):
 class Summary(Base):
     __tablename__ = "summaries"
     id = Column(String, primary_key=True, index=True)
+    doc_id = Column(String)
     model = Column(String)
     content = Column(String)
     updatedAt = Column(String)
