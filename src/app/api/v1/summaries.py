@@ -8,6 +8,9 @@ from openai import OpenAI
 
 from models.models import Sumdoc
 from schemas.schemas import SumdocSchema
+from models.models import Summary
+from schemas.schemas import SummarySchema
+
 from database.database import database
 from fastapi.encoders import jsonable_encoder
 
@@ -231,6 +234,22 @@ async def create_dummy_documents():
             await database.execute(Sumdoc.__table__.insert().values(sumdoc))
 
 
+async def create_summaries_table():
+    async with database.transaction():
+        await database.execute("DROP TABLE IF EXISTS summaries")
+        await database.execute(
+            """
+            CREATE TABLE summaries (
+                id TEXT PRIMARY KEY,
+                doc_id TEXT,
+                model TEXT,
+                content TEXT,
+                updatedAt TEXT,
+                createdAt TEXT
+            )
+            """
+        )
+
 # async def summarize(model: str, text: str) -> List[Dict[str, Any]]:
 #     # Simulate an asynchronous call to generate summaries
 #     await asyncio.sleep(1)  # Simulating async I/O operation
@@ -293,8 +312,8 @@ async def summarize(model, document, prompt_template, max_length=4000):
 @router.post("/documents", response_model=SumdocSchema, tags=["Summaries"])
 async def create_document(sumdoc: SumdocSchema):
     new_sumdoc = sumdoc.dict()
-    
-    new_sumdoc["id"] = str(uuid.uuid4())
+    doc_id = str(uuid.uuid4())
+    new_sumdoc["id"] = doc_id
     
     # Assume description is the text you want to summarize
     description = new_sumdoc.get("description", "")
@@ -307,8 +326,8 @@ async def create_document(sumdoc: SumdocSchema):
         model_b = "gpt-4"
 
     # Run summarize() on two different models
-    summary_a_task = create_summary_task.delay(model_a, description)
-    summary_b_task = create_summary_task.delay(model_b, description)
+    summary_a_task = create_summary_task.delay(model_a, description, doc_id)
+    summary_b_task = create_summary_task.delay(model_b, description, doc_id)
 
     # Here, you'll need to decide how to store these summaries.
     # For simplicity, let's add them directly to the sumdoc dict.
@@ -333,6 +352,7 @@ async def get_document_by_id(document_id: str):
 @router.put("/documents/{document_id}", response_model=SumdocSchema, tags=["Summaries"])
 async def update_document(document_id: str, updated_sumdoc: SumdocSchema):
     # Check if the Sumdoc with the given ID exists
+    doc_id = str(uuid.uuid4())
 
     existing_sumdoc = await get_document_by_id(document_id)
     if not existing_sumdoc:
@@ -358,13 +378,13 @@ async def update_document(document_id: str, updated_sumdoc: SumdocSchema):
         model_b = "gpt-4"
 
     # Run summarize() on two different models
-    summary_a_text = await summarize(model_a, description, prompt_template)
-    summary_b_text = await summarize(model_b, description, prompt_template)
+    summary_a_task = create_summary_task.delay(model_a, description, doc_id)
+    summary_b_task = create_summary_task.delay(model_b, description, doc_id)
 
     # Update the summaries in existing_sumdoc_data
     existing_sumdoc_data["summaries"] = [
-        {"summary_a": [{"model": model_a, "summary": summary_a_text}]},
-        {"summary_b": [{"model": model_b, "summary": summary_b_text}]}
+        {"summary_a": [{"model": model_a, "summary": summary_a_task.id}]},
+        {"summary_b": [{"model": model_b, "summary": summary_b_task.id}]}
     ]
 
     # Commit the changes to the database
@@ -376,8 +396,8 @@ async def update_document(document_id: str, updated_sumdoc: SumdocSchema):
     return updated_sumdoc
 
 # Route to create the database and insert dummy records
-@router.post("/initialize_database", tags=["Summaries"])
-async def create_database():
+@router.post("/initialize-database", tags=["Summaries"])
+async def initialize_database_endpoint():
     try:
         await create_dummy_documents()
         return {"message": "Database created successfully with dummy records."}
@@ -492,3 +512,19 @@ def read_text_file(file_path: str) -> str:
     """Utility function to read text from a given file path."""
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.read()
+
+@router.post("/create-summaries-table", tags=["Summaries"])
+async def create_summaries_table_endpoint():
+    try:
+        await create_summaries_table()
+        return {"message": "Summaries table created successfully."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+async def get_all_summaries():
+    query = Summary.__table__.select()
+    return await database.fetch_all(query)
+
+@router.get("/summaries", response_model=List[SummarySchema], tags=["Summaries"])
+async def read_summaries():
+    return await get_all_summaries()

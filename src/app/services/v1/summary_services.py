@@ -1,5 +1,5 @@
 from openai import OpenAI
-
+import uuid
 
 prompt_template = """
     You are an attorney who has been given part of a document enclosed below in <document> tags.
@@ -59,4 +59,19 @@ async def summarize(api_key, model=model, document=document, prompt_template=pro
         # max_tokens=512
     ).choices[0].message.content.strip()
 
+    return response
+
+async def create_summarization(api_key, model=model, document=document, prompt_template=prompt_template, doc_id=None, max_length=4000):
+
+    # Format the prompt with truncated text
+    prompt = prompt_template.format(document=document)
+    client = OpenAI(api_key=api_key)
+    response = client.chat.completions.create(
+        # model="text-davinci-003",  # Lighter model
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.5,
+        # max_tokens=512
+    ).choices[0].message.content.strip()
+    
     return response
