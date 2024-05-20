@@ -92,15 +92,15 @@ async def create_document(sumdoc: SumdocSchema):
         model_b = "gpt-4"
 
     # Run summarize() on two different models
-    summary_a_text = await summarize(model_a, description, prompt_template)
-    summary_b_text = await summarize(model_b, description, prompt_template)
+    summary_a_task = await summarize(model_a, description, prompt_template)
+    summary_b_task = await summarize(model_b, description, prompt_template)
 
     # Here, you'll need to decide how to store these summaries.
     # For simplicity, let's add them directly to the sumdoc dict.
     # This approach depends entirely on how your database and models are set up.
     new_sumdoc["summaries"] = [
-        {"summary_a": [{"model": model_a, "summary": summary_a_text}]},
-        {"summary_b": [{"model": model_b, "summary": summary_b_text}]}
+        {"summary_a": [{"model": model_a, "summary": summary_a_task}]},
+        {"summary_b": [{"model": model_b, "summary": summary_b_task}]}
     ]
 
     query = Sumdoc.__table__.insert().values(new_sumdoc)

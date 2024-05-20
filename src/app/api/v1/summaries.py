@@ -11,7 +11,7 @@ from schemas.schemas import SumdocSchema
 from database.database import database
 from fastapi.encoders import jsonable_encoder
 
-from worker import summarize_task
+from worker import summarize_task, create_summary_task
 
 router = APIRouter()
 
@@ -307,15 +307,15 @@ async def create_document(sumdoc: SumdocSchema):
         model_b = "gpt-4"
 
     # Run summarize() on two different models
-    summary_a_text = await summarize(model_a, description, prompt_template)
-    summary_b_text = await summarize(model_b, description, prompt_template)
+    summary_a_task = create_summary_task.delay(model_a, description)
+    summary_b_task = create_summary_task.delay(model_b, description)
 
     # Here, you'll need to decide how to store these summaries.
     # For simplicity, let's add them directly to the sumdoc dict.
     # This approach depends entirely on how your database and models are set up.
     new_sumdoc["summaries"] = [
-        {"summary_a": [{"model": model_a, "summary": summary_a_text}]},
-        {"summary_b": [{"model": model_b, "summary": summary_b_text}]}
+        {"summary_a": [{"model": model_a, "summary": summary_a_task.id}]},
+        {"summary_b": [{"model": model_b, "summary": summary_b_task.id}]}
     ]
 
     query = Sumdoc.__table__.insert().values(new_sumdoc)

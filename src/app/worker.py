@@ -21,3 +21,10 @@ def summarize_task(model, document):
     loop = asyncio.get_event_loop()
     result = loop.run_until_complete(summarize(api_key, model, document))
     return result
+
+
+@celery.task(name="create_summary_task")
+def create_summary_task(model, document):
+    loop = asyncio.get_event_loop()
+    result = loop.run_until_complete(summarize(api_key, model, document))
+    return result
