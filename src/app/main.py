@@ -3,17 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, String, Float, Boolean, JSON, Integer
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
-from databases import Database
 from typing import List
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
 load_dotenv()
-from .models.models import Sumdoc
-from .schemas.schemas import ProductSchema, SumdocSchema
-from .database.database import database
 # from .routes import products
-from .api.v1 import summaries
+from api.v1 import summaries
 from typing import List, Dict, Any
 import asyncio
 from openai import OpenAI

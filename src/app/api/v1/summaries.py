@@ -5,9 +5,9 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 from openai import OpenAI
 
-from app.models.models import Sumdoc
-from app.schemas.schemas import SumdocSchema
-from app.database.database import database
+from models.models import Sumdoc
+from schemas.schemas import SumdocSchema
+from database.database import database
 from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
