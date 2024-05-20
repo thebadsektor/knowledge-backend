@@ -144,3 +144,5 @@ sonarqube/data
 sonarqube/logs
 
 .terraform
+
+dump.rdb

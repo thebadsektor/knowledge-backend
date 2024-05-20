@@ -68,15 +68,3 @@ class Sumdoc(Base):
     progress = Column(JSON)
     steps = Column(JSON)
     summaries = Column(JSON)
-
-class SummaryTask(Base):
-    __tablename__ = "summary_tasks"
-    id = Column(String, primary_key=True, index=True)
-    sumdocId = Column(String)
-    status = Column(String)
-    errorMessage = Column(String)
-    model = Column(String)
-    summary = Column(String)
-    retryCount = Column(Integer)
-    createdAt = Column(String)
-    updatedAt = Column(String)
