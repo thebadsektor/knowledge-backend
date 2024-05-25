@@ -1,6 +1,6 @@
 #TODO: test.db is at root and inside app/app/, fix this
 
-```plaintext
+```bash
 .
 └── backend/
     ├── .venv
@@ -8,15 +8,14 @@
     │   └── app/
     │       ├── api/
     │       │   ├── v1/
-    │       │   │   ├── summaries.py
-    │       │   │   └── summary_tasks.py
+    │       │   │   ├── general_tasks.py
+    │       │   │   └── summaries.py
     │       │   └── v2/
     │       │       └── summaries.py
     │       ├── databases/
     │       │   └── database.py
     │       ├── documents/ #For testing celery job queue/
     │       │   └── document-1-357-1697.txt
-    │       │   └── document-2-2035-10856.txt
     │       ├── logs/
     │       │   ├── .gitkeep
     │       │   └── celery.log
@@ -25,7 +24,10 @@
     │       ├── schemas/
     │       │   └── schemas.py
     │       ├── services/
-    │       │   └── summarize_service.py
+    │       │   ├── v1/
+    │       │   │   └── summary_services.py
+    │       │   └── v2/
+    │       │       └── summary_services.py
     │       ├── tests/
     │       │   ├── conftest.py
     │       │   └── test_tasks.py
@@ -34,6 +36,7 @@
     │       ├── Dockerfile
     │       ├── main.py
     │       ├── requirements.txt
+    │       ├── test.db
     │       └── worker.py
     ├── .env
     ├── .gitignore
