@@ -320,9 +320,9 @@ async def create_document(sumdoc: SumdocSchema):
     
     if random.choice([True, False]):
         model_a = "gpt-4"
-        model_b = "gpt-3.5-turbo-0613"
+        model_b = "gpt-3.5-turbo-1106"
     else:
-        model_a = "gpt-3.5-turbo-0613"
+        model_a = "gpt-3.5-turbo-1106"
         model_b = "gpt-4"
 
     # Run summarize() on two different models
@@ -372,9 +372,9 @@ async def update_document(document_id: str, updated_sumdoc: SumdocSchema):
 
     if random.choice([True, False]):
         model_a = "gpt-4"
-        model_b = "gpt-3.5-turbo-0613"
+        model_b = "gpt-3.5-turbo-1106"
     else:
-        model_a = "gpt-3.5-turbo-0613"
+        model_a = "gpt-3.5-turbo-1106"
         model_b = "gpt-4"
 
     # Run summarize() on two different models
@@ -444,7 +444,7 @@ async def delete_document_by_id(document_id: str):
           The operation returns task IDs for the summarization task.
           """)
 def summarize_task_endpoint():
-    model = "gpt-3.5-turbo-0613"
+    model = "gpt-3.5-turbo-1106"
     document_1 = read_text_file("documents/document-1-357-1697.txt")
     task_1 = summarize_task.delay(model, document_1)
     return JSONResponse({"task_ids": {"document_1": task_1.id}})
@@ -471,7 +471,7 @@ def summarize_task_endpoint():
           """)
 def batch_summarize_task_endpoint():
     
-    model = "gpt-3.5-turbo-0613"
+    model = "gpt-3.5-turbo-1106"
     document_1 = read_text_file("documents/document-1-357-1697.txt")
     document_2 = read_text_file("documents/document-2-2035-10856.txt")
     document_3 = read_text_file("documents/document-3-388-1786.txt")

@@ -43,7 +43,7 @@ document = """
     Test document.
 """
 
-model = "gpt-3.5-turbo-0613"
+model = "gpt-3.5-turbo-1106"
     
 
 async def summarize(api_key, model=model, document=document, prompt_template=prompt_template, max_length=4000):

@@ -66,3 +66,11 @@
     ├── docker-compose.yml
     └── READEME.md
 ```
+
+```
+docker compose up -d --build
+```
+
+```
+docker compose down
+```
