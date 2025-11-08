@@ -1,4 +1,24 @@
-# Getting Started
+# Knowledge Research Inc. API
+
+This project is a containerized application that provides a RESTful API for summarizing text documents using OpenAI's language models. The application is built with FastAPI and uses Celery for asynchronous task processing, with Redis as the message broker and result backend. The project is fully containerized using Docker Compose, which simplifies the setup and deployment process.
+
+## Architecture
+
+The application is composed of the following services:
+
+- **`web`**: A FastAPI application that serves the RESTful API.
+- **`worker`**: A Celery worker that processes summarization tasks asynchronously.
+- **`redis`**: A Redis instance that serves as the message broker for Celery.
+- **`dashboard`**: A Flower dashboard for monitoring the Celery worker.
+
+## Getting Started
+
+### Prerequisites
+
+- Docker and Docker Compose must be installed on your local machine.
+- You must have an active OpenAI API key.
+
+### Installation
 
 1. **Clone the repository:**
    ```bash
@@ -21,56 +41,39 @@
    docker-compose up -d --build
    ```
 
-#TODO: test.db is at root and inside app/app/, fix this
+### Usage
 
-```bash
+- **API**: The FastAPI application will be available at `http://localhost:8000`. You can access the API documentation at `http://localhost:8000/docs`.
+- **Flower Dashboard**: The Flower dashboard will be available at `http://localhost:5556`.
+
+### Project Structure
+
+```
 .
-└── backend/
-    ├── .venv
-    ├── src/
-    │   └── app/
-    │       ├── api/
-    │       │   ├── v1/
-    │       │   │   ├── general_tasks.py
-    │       │   │   └── summaries.py
-    │       │   └── v2/
-    │       │       └── summaries.py
-    │       ├── databases/
-    │       │   └── database.py
-    │       ├── documents/ #For testing celery job queue/
-    │       │   └── document-1-357-1697.txt
-    │       ├── logs/
-    │       │   ├── .gitkeep
-    │       │   └── celery.log
-    │       ├── models/
-    │       │   └── models.py
-    │       ├── schemas/
-    │       │   └── schemas.py
-    │       ├── services/
-    │       │   ├── v1/
-    │       │   │   └── summary_services.py
-    │       │   └── v2/
-    │       │       └── summary_services.py
-    │       ├── tests/
-    │       │   ├── conftest.py
-    │       │   └── test_tasks.py
-    │       ├── utils/
-    │       │   └── openai.py
-    │       ├── Dockerfile
-    │       ├── main.py
-    │       ├── requirements.txt
-    │       ├── test.db
-    │       └── worker.py
-    ├── .env
-    ├── .gitignore
-    ├── docker-compose.yml
-    └── READEME.md
-```
-
-```
-docker compose up -d --build
-```
-
-```
-docker compose down
+├── src/
+│   └── app/
+│       ├── api/
+│       │   ├── v1/
+│       │   │   ├── general_tasks.py
+│       │   │   └── summaries.py
+│       │   └── v2/
+│       │       └── summaries.py
+│       ├── database/
+│       │   └── database.py
+│       ├── models/
+│       │   └── models.py
+│       ├── schemas/
+│       │   └── schemas.py
+│       ├── services/
+│       │   ├── v1/
+│       │   │   └── summary_services.py
+│       │   └── v2/
+│       │       └── summary_services.py
+│       ├── Dockerfile
+│       ├── main.py
+│       └── worker.py
+├── .env
+├── .gitignore
+├── docker-compose.yml
+└── README.md
 ```
