@@ -234,9 +234,9 @@ async def create_product(product: ProductSchema):
     
     if random.choice([True, False]):
         model_a = "gpt-4"
-        model_b = "gpt-3.5-turbo-0613"
+        model_b = "gpt-3.5-turbo-1106"
     else:
-        model_a = "gpt-3.5-turbo-0613"
+        model_a = "gpt-3.5-turbo-1106"
         model_b = "gpt-4"
 
     # Run summarize() on two different models
@@ -286,9 +286,9 @@ async def update_product(product_id: str, updated_product: ProductSchema):
 
     if random.choice([True, False]):
         model_a = "gpt-4"
-        model_b = "gpt-3.5-turbo-0613"
+        model_b = "gpt-3.5-turbo-1106"
     else:
-        model_a = "gpt-3.5-turbo-0613"
+        model_a = "gpt-3.5-turbo-1106"
         model_b = "gpt-4"
 
     # Run summarize() on two different models
