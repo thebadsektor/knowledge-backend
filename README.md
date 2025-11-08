@@ -1,3 +1,26 @@
+# Getting Started
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/your-repo-name.git
+   cd your-repo-name
+   ```
+
+2. **Set up the environment:**
+   - Create a `.env` file by copying the sample file:
+     ```bash
+     cp sample.env .env
+     ```
+   - Open the `.env` file and add your OpenAI API key:
+     ```
+     OPENAI_API_KEY=your_openai_api_key
+     ```
+
+3. **Build and run with Docker Compose:**
+   ```bash
+   docker-compose up -d --build
+   ```
+
 #TODO: test.db is at root and inside app/app/, fix this
 
 ```bash
